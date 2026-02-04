@@ -5,10 +5,17 @@ import Groq from 'groq-sdk';
  * Handles recipe generation using Groq AI
  */
 
-// Initialize Groq client
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY
-});
+// Initialize Groq client lazily
+let groq = null;
+
+const getGroqClient = () => {
+  if (!groq && process.env.GROQ_API_KEY) {
+    groq = new Groq({
+      apiKey: process.env.GROQ_API_KEY
+    });
+  }
+  return groq;
+};
 
 /**
  * Generate recipe using Groq AI
@@ -23,6 +30,15 @@ export const generateRecipe = async (req, res) => {
     if (!ingredients || ingredients.trim().length === 0) {
       return res.status(400).json({ 
         error: 'Ingredients are required' 
+      });
+    }
+
+    // Check if Groq API is configured
+    const groqClient = getGroqClient();
+    if (!groqClient) {
+      return res.status(503).json({
+        error: 'Recipe generation service not configured',
+        message: 'Please configure GROQ_API_KEY in the server environment'
       });
     }
 
@@ -48,7 +64,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown, no addit
 }`;
 
     // Call Groq AI API
-    const chatCompletion = await groq.chat.completions.create({
+    const chatCompletion = await groqClient.chat.completions.create({
       messages: [
         {
           role: 'system',
