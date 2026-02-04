@@ -138,7 +138,7 @@ export const getRandomRecipes = async (req, res) => {
       },
       {
         recipeName: 'Pad Thai',
-        cuisine: 'Chinese',
+        cuisine: 'Thai',
         description: 'Stir-fried rice noodles with eggs, vegetables, and peanuts',
         difficulty: 'Medium',
         cookingTime: '25 minutes'
