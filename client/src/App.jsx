@@ -19,8 +19,8 @@ function App() {
   const [isLoadingRandom, setIsLoadingRandom] = useState(true);
   const [error, setError] = useState(null);
 
-  // API base URL
-  const API_BASE_URL = '/api';
+  // API base URL - from environment variable
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://cookify-yg22.onrender.com/api';
 
   /**
    * Fetch random recipes on component mount
@@ -74,7 +74,8 @@ function App() {
       const recipeResponse = await axios.post(`${API_BASE_URL}/generate-recipe`, {
         ingredients: formData.ingredients,
         cuisine: formData.cuisine,
-        vessel: formData.vessel
+        vessel: formData.vessel,
+        servings: formData.servings
       });
 
       const generatedRecipe = recipeResponse.data.recipe;
@@ -119,6 +120,40 @@ function App() {
     }
   };
 
+  /**
+   * Reset all recipe data
+   */
+  const handleReset = () => {
+    setRecipe(null);
+    setNutrition(null);
+    setError(null);
+    localStorage.removeItem('lastRecipe');
+  };
+
+  /**
+   * Load a random recipe as the current recipe
+   */
+  const handleViewRecipe = (selectedRecipe) => {
+    setRecipe(selectedRecipe);
+    setError(null);
+    localStorage.setItem('lastRecipe', JSON.stringify(selectedRecipe));
+    
+    // Fetch nutrition if ingredients available
+    if (selectedRecipe.ingredients && selectedRecipe.ingredients.length > 0) {
+      fetchNutritionInfo(selectedRecipe.ingredients);
+    } else {
+      setNutrition(null);
+    }
+    
+    // Scroll to recipe result
+    setTimeout(() => {
+      const recipeElement = document.getElementById('recipe-result');
+      if (recipeElement) {
+        recipeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-green-50">
       {/* Header */}
@@ -141,6 +176,7 @@ function App() {
         <section className="max-w-3xl mx-auto mb-12">
           <RecipeForm 
             onGenerateRecipe={handleGenerateRecipe}
+            onReset={handleReset}
             isLoading={isGenerating}
           />
         </section>
@@ -180,6 +216,7 @@ function App() {
           <RandomRecipes 
             recipes={randomRecipes}
             isLoading={isLoadingRandom}
+            onViewRecipe={handleViewRecipe}
           />
         </section>
       </main>

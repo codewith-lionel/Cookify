@@ -4,7 +4,7 @@ import React from 'react';
  * RandomRecipes Component
  * Displays random recipe suggestions
  */
-const RandomRecipes = ({ recipes, isLoading }) => {
+const RandomRecipes = ({ recipes, isLoading, onViewRecipe }) => {
   if (isLoading) {
     return (
       <div className="py-12">
@@ -80,8 +80,9 @@ const RandomRecipes = ({ recipes, isLoading }) => {
             {/* View Button */}
             <button
               onClick={() => {
-                // Scroll to top and show recipe details (future enhancement)
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (onViewRecipe) {
+                  onViewRecipe(recipe);
+                }
               }}
               className="w-full bg-secondary hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
             >

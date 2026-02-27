@@ -24,7 +24,7 @@ const getGroqClient = () => {
  */
 export const generateRecipe = async (req, res) => {
   try {
-    const { ingredients, cuisine, vessel } = req.body;
+    const { ingredients, cuisine, vessel, servings = 2 } = req.body;
 
     // Validate inputs
     if (!ingredients || ingredients.trim().length === 0) {
@@ -48,7 +48,9 @@ export const generateRecipe = async (req, res) => {
 Recipe Requirements:
 - Cuisine: ${cuisine || 'Any'}
 - Cooking Vessel: ${vessel || 'Any'}
+- Servings: ${servings} people
 - Use ONLY the provided ingredients (no additional ingredients)
+- Adjust ingredient quantities for ${servings} servings
 - The recipe can be vegetarian, non-vegetarian, dessert, snack, or drink
 - Provide clear, step-by-step instructions
 
@@ -56,6 +58,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown, no addit
 {
   "recipeName": "Name of the recipe",
   "cuisine": "${cuisine || 'Any'}",
+  "servings": ${servings},
   "ingredients": ["ingredient 1 with quantity", "ingredient 2 with quantity"],
   "steps": ["Step 1 instruction", "Step 2 instruction"],
   "cookingTime": "XX minutes",
@@ -75,7 +78,7 @@ Return ONLY a valid JSON object with this EXACT structure (no markdown, no addit
           content: prompt
         }
       ],
-      model: 'mixtral-8x7b-32768',
+      model: 'llama-3.3-70b-versatile',
       temperature: 0.7,
       max_tokens: 2000,
       response_format: { type: 'json_object' }

@@ -4,11 +4,12 @@ import React, { useState } from 'react';
  * RecipeForm Component
  * Form for inputting recipe generation parameters
  */
-const RecipeForm = ({ onGenerateRecipe, isLoading }) => {
+const RecipeForm = ({ onGenerateRecipe, onReset, isLoading }) => {
   const [formData, setFormData] = useState({
     ingredients: '',
     cuisine: 'Any',
-    vessel: 'Any'
+    vessel: 'Any',
+    servings: 2
   });
 
   // Cuisine options
@@ -47,12 +48,18 @@ const RecipeForm = ({ onGenerateRecipe, isLoading }) => {
   /**
    * Reset form to initial state
    */
-  const handleReset = () => {
+  const handleResetForm = () => {
+    // Reset form fields
     setFormData({
       ingredients: '',
       cuisine: 'Any',
-      vessel: 'Any'
+      vessel: 'Any',
+      servings: 2
     });
+    // Call parent's reset function to clear recipe
+    if (onReset) {
+      onReset();
+    }
   };
 
   return (
@@ -125,6 +132,27 @@ const RecipeForm = ({ onGenerateRecipe, isLoading }) => {
           </select>
         </div>
 
+        {/* Servings Input */}
+        <div>
+          <label htmlFor="servings" className="block text-sm font-semibold text-gray-700 mb-2">
+            Number of Servings
+          </label>
+          <input
+            type="number"
+            id="servings"
+            name="servings"
+            value={formData.servings}
+            onChange={handleChange}
+            min="1"
+            max="20"
+            className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-primary transition-colors"
+            disabled={isLoading}
+          />
+          <p className="mt-1 text-xs text-gray-500">
+            Enter number of people (1-20)
+          </p>
+        </div>
+
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <button
@@ -137,7 +165,7 @@ const RecipeForm = ({ onGenerateRecipe, isLoading }) => {
           
           <button
             type="button"
-            onClick={handleReset}
+            onClick={handleResetForm}
             disabled={isLoading}
             className="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >

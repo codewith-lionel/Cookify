@@ -14,7 +14,8 @@ const RecipeResult = ({ recipe }) => {
     steps,
     cookingTime,
     difficulty,
-    vessel
+    vessel,
+    servings
   } = recipe;
 
   return (
@@ -45,6 +46,11 @@ const RecipeResult = ({ recipe }) => {
           {vessel && vessel !== 'Any' && (
             <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-500 text-white font-medium">
               🍳 {vessel}
+            </span>
+          )}
+          {servings && (
+            <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500 text-white font-medium">
+              👥 Serves {servings}
             </span>
           )}
         </div>
