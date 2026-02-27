@@ -19,43 +19,54 @@ const RecipeResult = ({ recipe }) => {
   } = recipe;
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 animate-fadeIn">
-      {/* Recipe Header */}
-      <div className="border-b-2 border-gray-200 pb-4 mb-6">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-3">
-          {recipeName}
-        </h2>
-        
-        {/* Recipe Meta Information */}
-        <div className="flex flex-wrap gap-3 text-sm">
-          {cuisine && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary text-white font-medium">
-              🌍 {cuisine}
-            </span>
-          )}
-          {difficulty && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-secondary text-white font-medium">
-              📊 {difficulty}
-            </span>
-          )}
-          {cookingTime && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-orange-500 text-white font-medium">
-              ⏱️ {cookingTime}
-            </span>
-          )}
-          {vessel && vessel !== 'Any' && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-500 text-white font-medium">
-              🍳 {vessel}
-            </span>
-          )}
-          {servings && (
-            <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500 text-white font-medium">
-              👥 Serves {servings}
-            </span>
-          )}
+    <div className="bg-white rounded-lg shadow-lg overflow-hidden animate-fadeIn">
+      {/* Recipe Hero Image */}
+      <div className="relative h-64 md:h-80 overflow-hidden">
+        <img 
+          src={`https://source.unsplash.com/1200x800/?${cuisine || 'food'},${recipeName.split(' ')[0]},cooking,recipe`}
+          alt={recipeName}
+          className="w-full h-full object-cover"
+          onError={(e) => {
+            e.target.src = 'https://images.unsplash.com/photo-1498837167922-ddd27525d352?w=1200&h=800&fit=crop';
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+        <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3 drop-shadow-lg">
+            {recipeName}
+          </h2>
+          {/* Recipe Meta Information */}
+          <div className="flex flex-wrap gap-3 text-sm">
+            {cuisine && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-primary text-white font-medium shadow-lg">
+                🌍 {cuisine}
+              </span>
+            )}
+            {difficulty && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-secondary text-white font-medium shadow-lg">
+                📊 {difficulty}
+              </span>
+            )}
+            {cookingTime && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-orange-500 text-white font-medium shadow-lg">
+                ⏱️ {cookingTime}
+              </span>
+            )}
+            {vessel && vessel !== 'Any' && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-purple-500 text-white font-medium shadow-lg">
+                🍳 {vessel}
+              </span>
+            )}
+            {servings && (
+              <span className="inline-flex items-center px-3 py-1 rounded-full bg-blue-500 text-white font-medium shadow-lg">
+                👥 Serves {servings}
+              </span>
+            )}
+          </div>
         </div>
       </div>
-
+      
+      <div className="p-6 md:p-8">
       {/* Ingredients Section */}
       {ingredients && ingredients.length > 0 && (
         <div className="mb-6">
@@ -110,6 +121,7 @@ const RecipeResult = ({ recipe }) => {
         >
           💾 Save Recipe
         </button>
+      </div>
       </div>
     </div>
   );

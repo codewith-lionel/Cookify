@@ -155,9 +155,26 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-green-50">
+    <div className="min-h-screen relative">
+      {/* Full Background Image */}
+      <div 
+        className="fixed inset-0 z-0"
+        style={{
+          backgroundImage: 'url(https://images.unsplash.com/photo-1495195134817-aeb325a55b65?w=1920&h=1080&fit=crop)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundAttachment: 'fixed',
+          backgroundRepeat: 'no-repeat'
+        }}
+      >
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-white/75 backdrop-blur-sm"></div>
+      </div>
+
+      {/* Content Container */}
+      <div className="relative z-10">
       {/* Header */}
-      <header className="bg-white shadow-md">
+      <header className="bg-white/90 backdrop-blur-md shadow-md">
         <div className="container mx-auto px-4 py-6">
           <div className="flex items-center justify-center">
             <h1 className="text-3xl md:text-4xl font-bold text-primary">
@@ -222,7 +239,7 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 mt-16">
+      <footer className="bg-gray-800/95 backdrop-blur-md text-white py-8 mt-16">
         <div className="container mx-auto px-4 text-center">
           <p className="text-lg font-semibold mb-2">🍳 Cookify</p>
           <p className="text-gray-400 text-sm">
@@ -233,6 +250,7 @@ function App() {
           </p>
         </div>
       </footer>
+      </div>
     </div>
   );
 }

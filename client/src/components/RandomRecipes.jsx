@@ -39,20 +39,31 @@ const RandomRecipes = ({ recipes, isLoading, onViewRecipe }) => {
         {recipes.map((recipe, index) => (
           <div
             key={index}
-            className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow p-6 animate-fadeIn"
+            className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all overflow-hidden animate-fadeIn"
             style={{ animationDelay: `${index * 0.1}s` }}
           >
+            {/* Recipe Image */}
+            <div className="relative h-48 overflow-hidden">
+              <img 
+                src={`https://source.unsplash.com/800x600/?${recipe.cuisine || 'food'},recipe,dish,${index}`}
+                alt={recipe.recipeName}
+                className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                onError={(e) => {
+                  e.target.src = 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop';
+                }}
+              />
+              {recipe.cuisine && (
+                <span className="absolute top-3 right-3 px-3 py-1 text-xs font-semibold rounded-full bg-primary text-white shadow-lg">
+                  {recipe.cuisine}
+                </span>
+              )}
+            </div>
+            
+            <div className="p-6">
             {/* Recipe Name */}
             <h3 className="text-xl font-bold text-gray-800 mb-2">
               {recipe.recipeName}
             </h3>
-
-            {/* Cuisine Badge */}
-            {recipe.cuisine && (
-              <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-primary text-white mb-3">
-                {recipe.cuisine}
-              </span>
-            )}
 
             {/* Description */}
             {recipe.description && (
@@ -88,6 +99,7 @@ const RandomRecipes = ({ recipes, isLoading, onViewRecipe }) => {
             >
               👀 View Recipe
             </button>
+            </div>
           </div>
         ))}
       </div>
